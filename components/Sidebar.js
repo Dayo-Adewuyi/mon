@@ -24,8 +24,15 @@ function Sidebar() {
   ];
   let active = false;
 
+  const routeToPage = (str) => {
+    if (str === "Home") router.push(`/`);
+    else {
+      router.push(`/${str.toLowerCase()}`);
+    }
+  };
+
   return (
-    <div className="hidden sm:flex flex-col items-center xl:items-start xl:w-[340px] p-2 fixed h-full">
+    <div className="hidden sm:flex flex-col items-center xl:items-start p-2 h-full">
       <div className="space-y-2.5 mt-4 mb-2.5 xl:ml-24">
         {sidebarItems.map((item, i) => (
           <div
@@ -33,7 +40,7 @@ function Sidebar() {
               active && "font-bold"
             }`}
             key={i}
-            onClick={() => router.push(`/${item.title.toLowerCase()}`)}
+            onClick={() => routeToPage(item.title)}
           >
             <item.icon className="h-7" />
             <span className="hidden xl:inline">{item.title}</span>
