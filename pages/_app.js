@@ -1,36 +1,43 @@
 import "../styles/globals.css";
-import Sidebar from "../components/Sidebar";
-import Suggestions from "../components/Suggestions";
-import { useState } from "react";
-import Head from "next/head";
-import Navbar from "../components/Navbar";
-import Hero from "../components/Hero";
 
-export default function App({ Component, pageProps }) {
-  const [nav, setNav] = useState(true);
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  polygonMumbai,
+  filecoinHyperspace,
+} from "wagmi/chains";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+import { ConnectKitProvider, getDefaultClient } from "connectkit";
+import {AppProvider} from "../context/AppContext";
 
+
+const { chains, provider } = configureChains(
+  [filecoinHyperspace],
+  [publicProvider()]
+);
+
+const wagmiClient = createClient(
+  getDefaultClient({
+    appName: "coterie",
+    chains: chains,
+  })
+);
+
+export default function App({ Component, pageProps: { ...pageProps } }) {
   return (
-    <>
-      <Head>
-        <title>Coterie</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    // `session` comes from `getServerSideProps` or `getInitialProps`.
+    // Avoids flickering/session loading on first load.
 
-      {nav ? (
-        <div className="bg-[#f1f1f1] min-h-screen flex max-w-[1500px] mx-auto">
-          <Sidebar />
-          <Component {...pageProps} />
-          <Suggestions />
-        </div>
-      ) : (
-        <div>
-          <Navbar />
-          <Hero
-            heading="Coterie"
-            message="Connect,share and earn with friends and communities"
-          />
-        </div>
-      )}
-    </>
+    <WagmiConfig client={wagmiClient}>
+      <ConnectKitProvider>
+        <AppProvider>
+        <Component {...pageProps} />
+        </AppProvider>
+      </ConnectKitProvider>
+    </WagmiConfig>
   );
 }
