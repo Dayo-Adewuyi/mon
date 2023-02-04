@@ -1,5 +1,5 @@
 import Head from "next/head";
-import ExplorePage from "../components/ExplorePage";
+// import ExplorePage from "../components/ExplorePage";
 import Page from "@/components/Page";
 
 const Explore = () => {
@@ -7,7 +7,7 @@ const Explore = () => {
     <div>
       <>
         <Page title="Profile">
-          <ExplorePage />
+          {/* <ExplorePage /> */}
         </Page>
       </>
     </div>

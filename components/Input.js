@@ -29,9 +29,9 @@ function Input() {
 
   const addImageToPost = async (e) => {
     const reader = new FileReader();
-    setImage(e);
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
+      setImage(e.target.files[0]);
     }
     reader.onload = (readerEvent) => {
       setSelectedFile(readerEvent.target.result);
